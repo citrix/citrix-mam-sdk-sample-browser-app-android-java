@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SelectStartTunnelActivity">
+
+    <Button
+        android:id="@+id/execStartTunnelSendRequestButton"
+        style="@style/MenuItemButton"
+        android:layout_marginTop="64dp"
+        android:onClick="onStartTunnelAndSendNetworkRequest"
+        android:text="Start Tunnel and Launch URL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputURL" />
+
+    <Button
+        android:id="@+id/execStartTunnelButton"
+        style="@style/MenuItemButton"
+        android:layout_marginTop="16dp"
+        android:onClick="onStartTunnelClicked"
+        android:text="Start Tunnel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/execStartTunnelSendRequestButton" />
+
+    <Button
+        android:id="@+id/execLaunchURLButton"
+        style="@style/MenuItemButton"
+        android:layout_marginTop="16dp"
+        android:onClick="onSelectConnectionClicked"
+        android:text="Select Connection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/execStartTunnelButton" />
+
+    <Button
+        android:id="@+id/execStopTunnelButton"
+        style="@style/MenuItemButton"
+        android:layout_marginTop="16dp"
+        android:onClick="onStopTunnelClicked"
+        android:text="Stop Tunnel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/execLaunchURLButton" />
+
+    <EditText
+        android:id="@+id/inputURL"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="24dp"
+        android:autofillHints=""
+        android:gravity="center_vertical"
+        android:hint="@string/test_uri"
+        android:inputType="textUri|textPersonName"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/urlTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/urlTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:gravity="center"
+        android:text="URL:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/inputURL"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

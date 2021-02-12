@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MvpnTestApp</string>
+    <string name="test_uri">http://testweb.cemmobile.ctx</string>
+    <string name="notification_error_ssl_cert_invalid">Invalid SSL Certificate. Do you want to proceed?</string>
+    <string name="start_tunnel_progress_message">Please wait for network tunnel to start!!!</string>
+    <string name="mam_enrollment_progress_message">Please wait…</string>
+    <string name="intune_enrollment_success_message">Your app is Intune MAM enrolled.</string>
+    <string name="start_tunnel_failed_message">Micro VPN tunnel is not started.</string>
+    <string name="start_tunnel_success_message">Micro VPN tunnel started successfully. Please start sending network requests now…</string>
+    <string name="stop_tunnel_failed_message">Micro VPN tunnel is not stopped.</string>
+    <string name="stop_tunnel_success_message">Micro VPN tunnel is stopped successfully.</string>
+    <string name="session_expired_message">Session Expired. Starting Micro VPN Tunnel.</string>
+    <string name="select_mam_provider_title">Select MAM Provider</string>
+    <string name="main_title">MicroVPN SDK Tests!!!</string>
+    <string name="webview_title">MicroVPN - WebView</string>
+    <string name="url_connection_title">MicroVPN - URL Connection</string>
+    <string name="okhttp_title">MicroVPN - OkHttp</string>
+    <string name="start_tunnel_title">MicroVPN - Send Network Request</string>
+</resources>

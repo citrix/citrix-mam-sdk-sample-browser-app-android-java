@@ -1,0 +1,156 @@
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+ext {
+    mamSdkLibraryMaven = mamSdkLibraryMaven
+    if (mamSdkLibraryMaven.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in gradle.properties!!!')
+    }
+    println 'mamSdkLibraryMaven:' + mamSdkLibraryMaven
+
+    mamSdkLibraryTools = mamSdkLibraryTools
+    if (mamSdkLibraryTools.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in gradle.properties!!!')
+    }
+    println 'mamSdkLibraryTools:' + mamSdkLibraryTools
+
+    mamSdkLibraryLibs = mamSdkLibraryLibs
+    if (mamSdkLibraryLibs.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkLibraryLibs property value is missing in gradle.properties!!!')
+    }
+    println 'mamSdkLibraryLibs:' + mamSdkLibraryLibs
+
+    mamSdkVersion = mamSdkVersion
+    if (mamSdkVersion.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkVersion property value is missing in gradle.properties!!!')
+    }
+    println 'mamSdkVersion:' + mamSdkVersion
+
+    appPackageName = appPackageName
+    if (appPackageName.isEmpty()) {
+        throw new GradleException('ERROR: appPackageName property value is missing in gradle.properties!!!')
+    }
+    println 'appPackageName:' + appPackageName
+
+    keyStorePath = keyStorePath
+    if (keyStorePath.isEmpty()) {
+        throw new GradleException('ERROR: keyStorePath property value is missing in gradle.properties!!!')
+    }
+    println 'keyStorePath:' + keyStorePath
+
+    keystorePassword = keystorePassword
+    if (keystorePassword.isEmpty()) {
+        throw new GradleException('ERROR: keystorePassword property value is missing in gradle.properties!!!')
+    }
+    keyAlias = keyAlias
+    if (keyAlias.isEmpty()) {
+        throw new GradleException('ERROR: keyAlias property value is missing in gradle.properties!!!')
+    }
+    keyPassword = keyPassword
+    if (keyPassword.isEmpty()) {
+        throw new GradleException('ERROR: keyPassword property value is missing in gradle.properties!!!')
+    }
+}
+
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+android {
+    compileSdkVersion 29
+
+    def applicationName = "com.citrix.mvpntestapp.MvpnCemTestApplication"
+    if(Boolean.valueOf(enableIntune)) {
+        applicationName = "com.citrix.mvpntestapp.MvpnIntuneTestApplication"
+    }
+    println applicationName
+
+    defaultConfig {
+        applicationId "${project.ext.appPackageName}"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        manifestPlaceholders = [applicationName:applicationName]
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(project.ext.keyStorePath)
+            storePassword "$project.ext.keystorePassword"
+            keyAlias "$project.ext.keyAlias"
+            keyPassword "$project.ext.keyPassword"
+        }
+
+        debug {
+            storeFile file(project.ext.keyStorePath)
+            storePassword "$project.ext.keystorePassword"
+            keyAlias "$project.ext.keyAlias"
+            keyPassword "$project.ext.keyPassword"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    repositories {
+        maven { url "file://${project.ext.mamSdkLibraryMaven}" }
+        google()
+        jcenter()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // Intune MAM SDK and ADAL library. This library is not mandatory for CEM
+    implementation files("${project.ext.mamSdkLibraryLibs}/intunesdkaar-6.0.0.aar")
+    implementation 'com.microsoft.aad:adal:1.16.3'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    implementation group: 'com.citrix.android.sdk', name: 'mamsdk', version: "${project.ext.mamSdkVersion}"
+}
+
+task generateMdx(type: Exec) {
+
+    commandLine 'java', '-jar', "${project.ext.mamSdkLibraryTools}/managed-app-utility.jar", 'wrap',
+            '-in', "$buildDir/outputs/apk/release/${project.name}-release.apk",
+            '-out', "$buildDir/outputs/apk/release/${project.name}.mdx",
+            '-appType', 'sdkapp',
+            '-storeUrl', "https://play.google.com/store/apps/details?id=${project.ext.appPackageName}",
+            '-keystore', "${project.ext.keyStorePath}",
+            '-storepass', "${project.ext.keystorePassword}",
+            '-keyalias', "${project.ext.keyAlias}",
+            '-keypass', "${project.ext.keyPassword}"
+
+}
+
+build.finalizedBy generateMdx
