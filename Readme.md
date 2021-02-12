@@ -4,7 +4,7 @@ This repository contains the Android Java source code for a sample browser app t
 
 ## Download
 
-The MAM SDK libraries can be downloaded from [MAM SDKs and Toolkit](https://docs.citrix.com/en-us/mdx-toolkit/mam-sdk-overview.html).
+The MAM SDK libraries can be downloaded from [MAM SDKs and Toolkit](https://www.citrix.com/downloads/citrix-endpoint-management/product-software/mdx-toolkit.html).
 
 ## Documentation
 
