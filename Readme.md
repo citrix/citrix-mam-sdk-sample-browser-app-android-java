@@ -19,4 +19,4 @@ For questions and support:
 
 ## License
 
-[Apache License 2.0](./license/LICENSE)
+[MIT License](./LICENSE)
