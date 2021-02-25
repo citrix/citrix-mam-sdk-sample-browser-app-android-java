@@ -1,0 +1,43 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# OSX files
+.DS_Store
+
+# Android Studio and other IDEs
+*.project
+*.classpath
+.gradle
+build/
+.vscode/
+.settings/
+app/.settings/
+*.iml
+.idea/*
+proguard/
+*.log
+.navigation/
+captures/
+*.hprof
+
+# Keystore files
+*.jks
+*.keystore
+
+#NDK
+obj/
