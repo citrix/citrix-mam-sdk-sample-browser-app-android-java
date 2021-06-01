@@ -1,6 +1,8 @@
 package com.citrix.mvpntestapp.activities;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,7 +19,8 @@ import com.citrix.mvpntestapp.R;
 import com.citrix.mvpntestapp.util.TunnelHandler;
 import com.citrix.mvpntestapp.util.VpnUtil;
 import com.citrix.mvpntestapp.webview.CustomWebViewClient;
-import com.citrix.sdk.appcore.api.MamSdk;
+
+import static com.citrix.mvpntestapp.activities.MainActivity.URL_KEY;
 
 public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity implements TunnelHandler.Callback {
     private static final String TAG = "MVPN-StartTunnelReq";
@@ -26,16 +29,19 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
 
     private MvpnDefaultHandler mvpnHandler;
 
-    private boolean isIntuneSelected;
-
     private WebView webView;
 
     private WebViewClient webViewClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_webview);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
 
         webView = findViewById(R.id.webview);
         webView.clearCache(true);
@@ -45,8 +51,6 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
         webView.getSettings().setSaveFormData(false);
         webViewClient = new CustomWebViewClient();
         webView.setWebViewClient(webViewClient);
-
-        isIntuneSelected = getIntent().getBooleanExtra(SelectStartTunnelActivity.INTUNE_COMPANY_PORTAL_SELECTED_KEY, false);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -59,7 +63,7 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
                 mvpnHandler = new TunnelHandler(this);
             }
 
-            if (VpnUtil.startTunnel(this, mvpnHandler, isIntuneSelected)) {
+            if (VpnUtil.startTunnel(this, mvpnHandler)) {
                 progressBar.setVisibility(View.VISIBLE);
             } else {
                 Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
@@ -80,7 +84,7 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
         runOnUiThread(() -> {
             progressBar.setVisibility(View.GONE);
             if (isSessionExpired) {
-                if (VpnUtil.startTunnel(this, mvpnHandler, isIntuneSelected)) {
+                if (VpnUtil.startTunnel(this, mvpnHandler)) {
                     Toast.makeText(this, R.string.session_expired_message, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
@@ -94,14 +98,14 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
     private void loadUrl() {
         try {
             webView = MicroVPNSDK.enableWebViewObjectForNetworkTunnel(this, webView, webViewClient);
-            webView.loadUrl(getIntent().getStringExtra(SelectStartTunnelActivity.URL_KEY));
+            webView.loadUrl(getIntent().getStringExtra(URL_KEY));
         } catch (NetworkTunnelNotStartedException nte) {
-            MamSdk.getLogger().error(TAG, "Network Tunnel is not running:" + nte.getMessage());
-            if (!VpnUtil.startTunnel(this, mvpnHandler, isIntuneSelected)) {
+            Log.e(TAG, "Network Tunnel is not running:" + nte.getMessage());
+            if (!VpnUtil.startTunnel(this, mvpnHandler)) {
                 Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
             }
         } catch (MvpnException e) {
-            MamSdk.getLogger().error(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 }
