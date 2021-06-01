@@ -1,6 +1,5 @@
 package com.citrix.mvpntestapp.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,10 +38,6 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_webview);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WebView.setWebContentsDebuggingEnabled(true);
-        }
-
         webView = findViewById(R.id.webview);
         webView.clearCache(true);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -57,8 +52,6 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
         if (MicroVPNSDK.isNetworkTunnelRunning(this)) {
             loadUrl();
         } else {
-            progressBar = findViewById(R.id.progressBar);
-
             if (mvpnHandler == null) {
                 mvpnHandler = new TunnelHandler(this);
             }

@@ -44,8 +44,6 @@ public class UrlConnectionActivity extends AppCompatActivity {
     }
 
     private static class UrlConnectionAsyncTask extends AsyncTask<String, Void, String> {
-        private static final String LOG_TAG = "MVPN-UrlConnAsyncTask";
-
         private WeakReference<UrlConnectionActivity> reference;
 
         private UrlConnectionAsyncTask(UrlConnectionActivity activity) {

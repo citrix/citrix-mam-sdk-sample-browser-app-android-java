@@ -3,6 +3,7 @@ package com.citrix.mvpntestapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
         if (mvpnHandler == null) {
             mvpnHandler = new TunnelHandler(this);
         }
-
+        Log.i(TAG, "Before calling startTunnel()");
         if (VpnUtil.startTunnel(this, mvpnHandler)) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
