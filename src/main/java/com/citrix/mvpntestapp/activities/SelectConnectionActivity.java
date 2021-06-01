@@ -13,6 +13,8 @@ import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpntestapp.R;
 import com.citrix.mvpntestapp.util.UrlUtil;
 
+import static com.citrix.mvpntestapp.activities.MainActivity.URL_KEY;
+
 public class SelectConnectionActivity extends AppCompatActivity {
     private EditText uriText;
 
@@ -47,10 +49,10 @@ public class SelectConnectionActivity extends AppCompatActivity {
 
         if (uriText.getText() != null && !TextUtils.isEmpty(uriText.getText().toString())) {
             String url = uriText.getText().toString();
-            intent.putExtra(SelectStartTunnelActivity.URL_KEY, url);
+            intent.putExtra(URL_KEY, url);
             UrlUtil.saveUrl(this, url);
         } else {
-            intent.putExtra(SelectStartTunnelActivity.URL_KEY, getString(R.string.test_uri));
+            intent.putExtra(URL_KEY, getString(R.string.test_uri));
         }
 
         return intent;

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpn.exception.MvpnException;
 import com.citrix.mvpntestapp.R;
-import com.citrix.sdk.appcore.api.MamSdk;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -20,13 +20,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.citrix.mvpntestapp.activities.MainActivity.URL_KEY;
+
 public class OkHttpActivity extends AppCompatActivity {
+    private static final String TAG = "OkHttpActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_okhttp);
 
-        new OkHttpAsyncTask(this).execute(getIntent().getStringExtra(SelectStartTunnelActivity.URL_KEY));
+        new OkHttpAsyncTask(this).execute(getIntent().getStringExtra(URL_KEY));
     }
 
     private void displayResponse(String responseHtml) {
@@ -65,14 +69,14 @@ public class OkHttpActivity extends AppCompatActivity {
             try {
                 client = (OkHttpClient) MicroVPNSDK.enableOkHttpClientObjectForNetworkTunnel(activity, client);
             } catch (MvpnException e) {
-                MamSdk.getLogger().error(LOG_TAG, e.getMessage());
+                Log.e(TAG, e.getMessage());
             }
 
             try {
                 Response response = client.newCall(request).execute();
                 return response.body().string();
             } catch (IOException e) {
-                MamSdk.getLogger().error(LOG_TAG, e.getMessage());
+                Log.e(TAG, e.getMessage());
             }
 
             return "";

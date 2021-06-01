@@ -5,60 +5,68 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:4.2.0'
     }
+}
+
+plugins {
+    id "de.undercouch.download" version "4.1.1"
 }
 
 apply plugin: 'com.android.application'
 
+// Load keystore properties
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+// Load Citrix MAM SDK properties
+def mamsdkPropertiesFile = rootProject.file("mamsdk.properties")
+def mamsdkProperties = new Properties()
+mamsdkProperties.load(new FileInputStream(mamsdkPropertiesFile))
+
 ext {
-    mamSdkLibraryMaven = mamSdkLibraryMaven
+    mamSdkLibraryMaven = mamsdkProperties['mamSdkLibraryMaven']
     if (mamSdkLibraryMaven.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in mamsdk.properties!!!')
     }
     println 'mamSdkLibraryMaven:' + mamSdkLibraryMaven
 
-    mamSdkLibraryTools = mamSdkLibraryTools
+    mamSdkLibraryTools = mamsdkProperties['mamSdkLibraryTools']
     if (mamSdkLibraryTools.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in mamsdk.properties!!!')
     }
     println 'mamSdkLibraryTools:' + mamSdkLibraryTools
 
-    mamSdkLibraryLibs = mamSdkLibraryLibs
-    if (mamSdkLibraryLibs.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryLibs property value is missing in gradle.properties!!!')
-    }
-    println 'mamSdkLibraryLibs:' + mamSdkLibraryLibs
-
-    mamSdkVersion = mamSdkVersion
+    mamSdkVersion = mamsdkProperties['mamSdkVersion']
     if (mamSdkVersion.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkVersion property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: mamSdkVersion property value is missing in mamsdk.properties!!!')
     }
     println 'mamSdkVersion:' + mamSdkVersion
 
-    appPackageName = appPackageName
+    appPackageName = mamsdkProperties['appPackageName']
     if (appPackageName.isEmpty()) {
-        throw new GradleException('ERROR: appPackageName property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: appPackageName property value is missing in mamsdk.properties!!!')
     }
     println 'appPackageName:' + appPackageName
 
-    keyStorePath = keyStorePath
+    keyStorePath = keystoreProperties['keyStorePath']
     if (keyStorePath.isEmpty()) {
-        throw new GradleException('ERROR: keyStorePath property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: keyStorePath property value is missing in keystore.properties!!!')
     }
     println 'keyStorePath:' + keyStorePath
 
-    keystorePassword = keystorePassword
+    keystorePassword = keystoreProperties['keystorePassword']
     if (keystorePassword.isEmpty()) {
-        throw new GradleException('ERROR: keystorePassword property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: keystorePassword property value is missing in keystore.properties!!!')
     }
-    keyAlias = keyAlias
+    keyAlias = keystoreProperties['keyAlias']
     if (keyAlias.isEmpty()) {
-        throw new GradleException('ERROR: keyAlias property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: keyAlias property value is missing in keystore.properties!!!')
     }
-    keyPassword = keyPassword
+    keyPassword = keystoreProperties['keyPassword']
     if (keyPassword.isEmpty()) {
-        throw new GradleException('ERROR: keyPassword property value is missing in gradle.properties!!!')
+        throw new GradleException('ERROR: keyPassword property value is missing in keystore.properties!!!')
     }
 }
 
@@ -68,22 +76,14 @@ configurations.all {
 }
 
 android {
-    compileSdkVersion 29
-
-    def applicationName = "com.citrix.mvpntestapp.MvpnCemTestApplication"
-    if(Boolean.valueOf(enableIntune)) {
-        applicationName = "com.citrix.mvpntestapp.MvpnIntuneTestApplication"
-    }
-    println applicationName
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "${project.ext.appPackageName}"
-        minSdkVersion 23
-        targetSdkVersion 29
+        minSdkVersion 24
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [applicationName:applicationName]
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -109,7 +109,7 @@ android {
     }
 
     repositories {
-        maven { url "file://${project.ext.mamSdkLibraryMaven}" }
+        maven { url "https://raw.githubusercontent.com/citrix/citrix-mam-sdks/develop/maven" }
         google()
         jcenter()
     }
@@ -128,10 +128,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    // Intune MAM SDK and ADAL library. This library is not mandatory for CEM
-    implementation files("${project.ext.mamSdkLibraryLibs}/intunesdkaar-6.0.0.aar")
-    implementation 'com.microsoft.aad:adal:1.16.3'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
@@ -139,9 +135,14 @@ dependencies {
     implementation group: 'com.citrix.android.sdk', name: 'mamsdk', version: "${project.ext.mamSdkVersion}"
 }
 
-task generateMdx(type: Exec) {
+task downloadTools(type: Download, dependsOn: build) {
+    src "${project.ext.mamSdkLibraryTools}/managed-app-utility.jar"
+    dest "$buildDir/tools/managed-app-utility.jar"
+}
 
-    commandLine 'java', '-jar', "${project.ext.mamSdkLibraryTools}/managed-app-utility.jar", 'wrap',
+task generateMdx(type: Exec, dependsOn: [downloadTools]) {
+
+    commandLine 'java', '-jar', "$buildDir/tools/managed-app-utility.jar", 'wrap',
             '-in', "$buildDir/outputs/apk/release/${project.name}-release.apk",
             '-out', "$buildDir/outputs/apk/release/${project.name}.mdx",
             '-appType', 'sdkapp',
