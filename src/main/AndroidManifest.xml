@@ -3,7 +3,7 @@
     package="com.citrix.mvpntestapp">
 
     <application
-        android:name="${applicationName}"
+        android:name=".MvpnCemTestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,18 +14,12 @@
 
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/main_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.IntuneMAMEnrollmentActivity" />
-
-        <activity
-            android:name=".activities.SelectStartTunnelActivity"
-            android:label="@string/main_title" />
 
         <activity
             android:name=".activities.SelectConnectionActivity"
@@ -53,5 +47,10 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <package android:name="com.zenprise" />
+        <package android:name="com.citrix.Receiver" />
+    </queries>
 
 </manifest>

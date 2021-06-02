@@ -5,13 +5,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpntestapp.R;
-import com.citrix.sdk.appcore.api.MamSdk;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -20,13 +20,17 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.citrix.mvpntestapp.activities.MainActivity.URL_KEY;
+
 public class UrlConnectionActivity extends AppCompatActivity {
+    private static final String TAG = "UrlConnectionActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_urlconnection);
 
-        new UrlConnectionAsyncTask(this).execute(getIntent().getStringExtra(SelectStartTunnelActivity.URL_KEY));
+        new UrlConnectionAsyncTask(this).execute(getIntent().getStringExtra(URL_KEY));
     }
 
     private void displayResponse(String reponseHtml) {
@@ -40,8 +44,6 @@ public class UrlConnectionActivity extends AppCompatActivity {
     }
 
     private static class UrlConnectionAsyncTask extends AsyncTask<String, Void, String> {
-        private static final String LOG_TAG = "MVPN-UrlConnAsyncTask";
-
         private WeakReference<UrlConnectionActivity> reference;
 
         private UrlConnectionAsyncTask(UrlConnectionActivity activity) {
@@ -89,7 +91,7 @@ public class UrlConnectionActivity extends AppCompatActivity {
 
                 in.close();
             } catch (Exception e) {
-                MamSdk.getLogger().error(LOG_TAG, e.getMessage());
+                Log.e(TAG, e.getMessage(), e);
             }
 
             return response.toString();
