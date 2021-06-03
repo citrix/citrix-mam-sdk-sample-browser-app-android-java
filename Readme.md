@@ -9,36 +9,7 @@ The MAM SDK libraries can be downloaded from [MAM SDKs and Toolkit](https://www.
 Getting Started
 ---------------
 
-### Build the sample app
-#### Step 1
-Open mamsdk.properties file and update the below two properties. *mamSdkVersion* can have the latest version of MAM SDK. Current latest version is 20.10.5.1. *appPackageName* should have a unique package name. Since the APK needs to be published to Managed Google Play, the package name has to be globally unique.
-
-```
-mamSdkVersion=20.10.5.1
-appPackageName=com.citrix.mvpntestapp
-```
-
-#### Step 2
-Open keystore.properties file and update the below properties. This file contains APK signing keystore details. *keyStorePath* should have the complete path for the signing keystore. *keystorePassword* should have keystore password. *keyAlias* should have keystore alias. *keyPassword* should have key password.
-
-```
-keyStorePath=
-keystorePassword=
-keyAlias=
-keyPassword=
-```
-
-#### Step 3
-Run gradle build using the below command.
-```
-./gradlew clean build
-```
-
-#### Step 4
-After the gradle build completes successfully, the signed release APK and MDX files will be generated under this location <app module>/build/outputs/apk/release
-
-#### Step 5
-After generating the APK file and MDX file, you will need to upload the app to the Managed Google Play Store and configure MDX on the CEM server. For details refer [Distribute Apps](https://developer.cloud.com/citrixworkspace/mobile-application-integration/android-native/docs/distribute-apps) link.
+For details refer [Getting Started](https://developer.cloud.com/citrixworkspace/mobile-application-integration/android-native/docs/getting-started) link.
 
 ## Notes
 
