@@ -1,19 +1,16 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath "com.android.tools.build:gradle:4.2.1"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
-
-plugins {
-    id "de.undercouch.download" version "4.1.1"
-}
-
-apply plugin: 'com.android.application'
 
 // Load keystore properties
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -27,131 +24,24 @@ mamsdkProperties.load(new FileInputStream(mamsdkPropertiesFile))
 
 ext {
     mamSdkLibraryMaven = mamsdkProperties['mamSdkLibraryMaven']
-    if (mamSdkLibraryMaven.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkLibraryMaven:' + mamSdkLibraryMaven
-
     mamSdkLibraryTools = mamsdkProperties['mamSdkLibraryTools']
-    if (mamSdkLibraryTools.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkLibraryTools:' + mamSdkLibraryTools
-
     mamSdkVersion = mamsdkProperties['mamSdkVersion']
-    if (mamSdkVersion.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkVersion property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkVersion:' + mamSdkVersion
-
     appPackageName = mamsdkProperties['appPackageName']
-    if (appPackageName.isEmpty()) {
-        throw new GradleException('ERROR: appPackageName property value is missing in mamsdk.properties!!!')
-    }
-    println 'appPackageName:' + appPackageName
-
     keyStorePath = keystoreProperties['keyStorePath']
-    if (keyStorePath.isEmpty()) {
-        throw new GradleException('ERROR: keyStorePath property value is missing in keystore.properties!!!')
-    }
-    println 'keyStorePath:' + keyStorePath
-
     keystorePassword = keystoreProperties['keystorePassword']
-    if (keystorePassword.isEmpty()) {
-        throw new GradleException('ERROR: keystorePassword property value is missing in keystore.properties!!!')
-    }
     keyAlias = keystoreProperties['keyAlias']
-    if (keyAlias.isEmpty()) {
-        throw new GradleException('ERROR: keyAlias property value is missing in keystore.properties!!!')
-    }
     keyPassword = keystoreProperties['keyPassword']
-    if (keyPassword.isEmpty()) {
-        throw new GradleException('ERROR: keyPassword property value is missing in keystore.properties!!!')
-    }
 }
 
-configurations.all {
-    // Check for updates every build
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
-android {
-    compileSdkVersion 30
-
-    defaultConfig {
-        applicationId "${project.ext.appPackageName}"
-        minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        release {
-            storeFile file(project.ext.keyStorePath)
-            storePassword "$project.ext.keystorePassword"
-            keyAlias "$project.ext.keyAlias"
-            keyPassword "$project.ext.keyPassword"
-        }
-
-        debug {
-            storeFile file(project.ext.keyStorePath)
-            storePassword "$project.ext.keystorePassword"
-            keyAlias "$project.ext.keyAlias"
-            keyPassword "$project.ext.keyPassword"
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
+allprojects {
     repositories {
-        maven { url "https://raw.githubusercontent.com/citrix/citrix-mam-sdks/main/maven" }
+        maven { url "$rootProject.ext.mamSdkLibraryMaven" }
         google()
-        jcenter()
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            debuggable true
-            signingConfig signingConfigs.debug
-        }
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-
-    implementation group: 'com.citrix.android.sdk', name: 'mamsdk', version: "${project.ext.mamSdkVersion}"
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
-
-task downloadTools(type: Download, dependsOn: build) {
-    src "${project.ext.mamSdkLibraryTools}/managed-app-utility.jar"
-    dest "$buildDir/tools/managed-app-utility.jar"
-}
-
-task generateMdx(type: Exec, dependsOn: [downloadTools]) {
-
-    commandLine 'java', '-jar', "$buildDir/tools/managed-app-utility.jar", 'wrap',
-            '-in', "$buildDir/outputs/apk/release/${project.name}-release.apk",
-            '-out', "$buildDir/outputs/apk/release/${project.name}.mdx",
-            '-appType', 'sdkapp',
-            '-storeUrl', "https://play.google.com/store/apps/details?id=${project.ext.appPackageName}",
-            '-keystore', "${project.ext.keyStorePath}",
-            '-storepass', "${project.ext.keystorePassword}",
-            '-keyalias', "${project.ext.keyAlias}",
-            '-keypass', "${project.ext.keyPassword}"
-
-}
-
-build.finalizedBy generateMdx
