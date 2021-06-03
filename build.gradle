@@ -24,13 +24,42 @@ mamsdkProperties.load(new FileInputStream(mamsdkPropertiesFile))
 
 ext {
     mamSdkLibraryMaven = mamsdkProperties['mamSdkLibraryMaven']
+    if (mamSdkLibraryMaven.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in mamsdk.properties!!!')
+    }
+    println 'mamSdkLibraryMaven:' + mamSdkLibraryMaven
     mamSdkLibraryTools = mamsdkProperties['mamSdkLibraryTools']
+    if (mamSdkLibraryTools.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in mamsdk.properties!!!')
+    }
+    println 'mamSdkLibraryTools:' + mamSdkLibraryTools
     mamSdkVersion = mamsdkProperties['mamSdkVersion']
+    if (mamSdkVersion.isEmpty()) {
+        throw new GradleException('ERROR: mamSdkVersion property value is missing in mamsdk.properties!!!')
+    }
+    println 'mamSdkVersion:' + mamSdkVersion
     appPackageName = mamsdkProperties['appPackageName']
+    if (appPackageName.isEmpty()) {
+        throw new GradleException('ERROR: appPackageName property value is missing in mamsdk.properties!!!')
+    }
+    println 'appPackageName:' + appPackageName
     keyStorePath = keystoreProperties['keyStorePath']
+    if (keyStorePath.isEmpty()) {
+        throw new GradleException('ERROR: keyStorePath property value is missing in keystore.properties!!!')
+    }
+    println 'keyStorePath:' + keyStorePath
     keystorePassword = keystoreProperties['keystorePassword']
+    if (keystorePassword.isEmpty()) {
+        throw new GradleException('ERROR: keystorePassword property value is missing in keystore.properties!!!')
+    }
     keyAlias = keystoreProperties['keyAlias']
+    if (keyAlias.isEmpty()) {
+        throw new GradleException('ERROR: keyAlias property value is missing in keystore.properties!!!')
+    }
     keyPassword = keystoreProperties['keyPassword']
+    if (keyPassword.isEmpty()) {
+        throw new GradleException('ERROR: keyPassword property value is missing in keystore.properties!!!')
+    }
 }
 
 allprojects {
