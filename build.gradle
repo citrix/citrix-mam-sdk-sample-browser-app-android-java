@@ -6,68 +6,30 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.1"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
-// Load keystore properties
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-// Load Citrix MAM SDK properties
-def mamsdkPropertiesFile = rootProject.file("mamsdk.properties")
-def mamsdkProperties = new Properties()
-mamsdkProperties.load(new FileInputStream(mamsdkPropertiesFile))
-
 ext {
-    mamSdkLibraryMaven = mamsdkProperties['mamSdkLibraryMaven']
-    if (mamSdkLibraryMaven.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryMaven property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkLibraryMaven:' + mamSdkLibraryMaven
-    mamSdkLibraryTools = mamsdkProperties['mamSdkLibraryTools']
-    if (mamSdkLibraryTools.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkLibraryTools property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkLibraryTools:' + mamSdkLibraryTools
-    mamSdkVersion = mamsdkProperties['mamSdkVersion']
-    if (mamSdkVersion.isEmpty()) {
-        throw new GradleException('ERROR: mamSdkVersion property value is missing in mamsdk.properties!!!')
-    }
-    println 'mamSdkVersion:' + mamSdkVersion
-    appPackageName = mamsdkProperties['appPackageName']
-    if (appPackageName.isEmpty()) {
-        throw new GradleException('ERROR: appPackageName property value is missing in mamsdk.properties!!!')
-    }
-    println 'appPackageName:' + appPackageName
-    keyStorePath = keystoreProperties['keyStorePath']
-    if (keyStorePath.isEmpty()) {
-        throw new GradleException('ERROR: keyStorePath property value is missing in keystore.properties!!!')
-    }
-    println 'keyStorePath:' + keyStorePath
-    keystorePassword = keystoreProperties['keystorePassword']
-    if (keystorePassword.isEmpty()) {
-        throw new GradleException('ERROR: keystorePassword property value is missing in keystore.properties!!!')
-    }
-    keyAlias = keystoreProperties['keyAlias']
-    if (keyAlias.isEmpty()) {
-        throw new GradleException('ERROR: keyAlias property value is missing in keystore.properties!!!')
-    }
-    keyPassword = keystoreProperties['keyPassword']
-    if (keyPassword.isEmpty()) {
-        throw new GradleException('ERROR: keyPassword property value is missing in keystore.properties!!!')
-    }
+    appPackageName = "com.terry.mvpntestapp"
+
+    // #### Enter Keystore Path (e.g. <folder location>/mycompany.keystore )  #####
+    keyStorePath = "../mvpntest.keystore"
+
+    // #### Enter Keystore Password #####
+    keystorePassword = "Hello123"
+
+    // #### Enter Key Alias #####
+    keyAlias = "key0"
+
+    // #### Enter Key Password #####
+    keyPassword = "Hello123"
 }
 
 allprojects {
     repositories {
-        maven { url "$rootProject.ext.mamSdkLibraryMaven" }
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+//        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 

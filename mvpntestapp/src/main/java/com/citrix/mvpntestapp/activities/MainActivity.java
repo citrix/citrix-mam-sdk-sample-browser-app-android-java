@@ -10,14 +10,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
-import com.citrix.mvpn.api.MvpnDefaultHandler;
+//import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.api.MvpnDefaultHandler;
 import com.citrix.mvpntestapp.R;
-import com.citrix.mvpntestapp.util.TunnelHandler;
+//import com.citrix.mvpntestapp.util.TunnelHandler;
 import com.citrix.mvpntestapp.util.UrlUtil;
-import com.citrix.mvpntestapp.util.VpnUtil;
+//import com.citrix.mvpntestapp.util.VpnUtil;
 
-public class MainActivity extends AppCompatActivity implements TunnelHandler.Callback {
+public class MainActivity extends AppCompatActivity { //implements TunnelHandler.Callback {
     private static String TAG = "MVPN-SelectStartTunnelActivity";
 
     public static final String URL_KEY = "URL";
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
 
     private View progressBar;
 
-    private MvpnDefaultHandler mvpnHandler;
+//    private MvpnDefaultHandler mvpnHandler;
 
     private static final int DEFAULT_RETRY_COUNT = 3;
 
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
     }
 
     public void onStartTunnelClicked(View view) {
+        /*
         if (mvpnHandler == null) {
             mvpnHandler = new TunnelHandler(this);
         }
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
         } else {
             Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
         }
+         */
     }
 
     public void onSelectConnectionClicked(View view) {
@@ -61,9 +63,12 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
     }
 
     public void onStopTunnelClicked(View view) {
+        /*
         MicroVPNSDK.stopTunnel(this);
         int messageId = !MicroVPNSDK.isNetworkTunnelRunning(this) ? R.string.stop_tunnel_success_message : R.string.stop_tunnel_failed_message;
         Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
+         */
+        Toast.makeText(this, R.string.stop_tunnel_success_message, Toast.LENGTH_LONG).show();
     }
 
     public void onStartTunnelAndSendNetworkRequest(View view) {
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
         startActivity(intent);
     }
 
+    /*
     @Override
     public void onTunnelStarted() {
         runOnUiThread(() -> {
@@ -104,4 +110,5 @@ public class MainActivity extends AppCompatActivity implements TunnelHandler.Cal
             }
         });
     }
+    */
 }

@@ -2,10 +2,6 @@ plugins {
     id 'com.android.application'
 }
 
-plugins {
-    id "de.undercouch.download" version "4.1.1"
-}
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -55,29 +51,9 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation "com.citrix.android.sdk:mamsdk:${rootProject.ext.mamSdkVersion}"
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
-
-task downloadTools(type: Download, dependsOn: build) {
-    src "${rootProject.ext.mamSdkLibraryTools}/managed-app-utility.jar"
-    dest "$buildDir/tools/managed-app-utility.jar"
-    overwrite false
-}
-task generateMdx(type: Exec, dependsOn: [downloadTools]) {
-    commandLine 'java', '-jar', "$buildDir/tools/managed-app-utility.jar", 'wrap',
-            '-in', "$buildDir/outputs/apk/release/${project.name}-release.apk",
-            '-out', "$buildDir/outputs/apk/release/${project.name}.mdx",
-            '-appType', 'sdkapp',
-            '-storeUrl', "https://play.google.com/store/apps/details?id=${rootProject.ext.appPackageName}",
-            '-keystore', "${rootProject.ext.keyStorePath}",
-            '-storepass', "${rootProject.ext.keystorePassword}",
-            '-keyalias', "${rootProject.ext.keyAlias}",
-            '-keypass', "${rootProject.ext.keyPassword}"
-
-}
-build.finalizedBy generateMdx

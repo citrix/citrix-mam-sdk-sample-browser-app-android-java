@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpntestapp.R;
 
 import java.io.BufferedReader;
@@ -67,11 +67,11 @@ public class UrlConnectionActivity extends AppCompatActivity {
                 URL url = new URL(strUrl[0]);
                 HttpURLConnection conn;
 
-                if (MicroVPNSDK.isNetworkTunnelRunning(activity)) {
-                    conn = (HttpURLConnection) MicroVPNSDK.createURLConnection(activity, url);
-                } else {
+                //if (MicroVPNSDK.isNetworkTunnelRunning(activity)) {
+                //    conn = (HttpURLConnection) MicroVPNSDK.createURLConnection(activity, url);
+                //} else {
                     conn = (HttpURLConnection) url.openConnection();
-                }
+                //}
 
                 int responseCode = conn.getResponseCode();
                 InputStream inputStream;

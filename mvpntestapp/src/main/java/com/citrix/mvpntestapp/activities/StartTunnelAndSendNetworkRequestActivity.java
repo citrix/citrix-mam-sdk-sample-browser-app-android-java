@@ -10,23 +10,25 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/*
 import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpn.api.MvpnDefaultHandler;
 import com.citrix.mvpn.exception.MvpnException;
 import com.citrix.mvpn.exception.NetworkTunnelNotStartedException;
+*/
 import com.citrix.mvpntestapp.R;
-import com.citrix.mvpntestapp.util.TunnelHandler;
-import com.citrix.mvpntestapp.util.VpnUtil;
+//import com.citrix.mvpntestapp.util.TunnelHandler;
+//import com.citrix.mvpntestapp.util.VpnUtil;
 import com.citrix.mvpntestapp.webview.CustomWebViewClient;
 
 import static com.citrix.mvpntestapp.activities.MainActivity.URL_KEY;
 
-public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity implements TunnelHandler.Callback {
+public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity { // implements TunnelHandler.Callback {
     private static final String TAG = "MVPN-StartTunnelReq";
 
     private View progressBar;
 
-    private MvpnDefaultHandler mvpnHandler;
+//    private MvpnDefaultHandler mvpnHandler;
 
     private WebView webView;
 
@@ -49,8 +51,9 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
 
         progressBar = findViewById(R.id.progressBar);
 
-        if (MicroVPNSDK.isNetworkTunnelRunning(this)) {
+        //if (MicroVPNSDK.isNetworkTunnelRunning(this)) {
             loadUrl();
+        /*
         } else {
             if (mvpnHandler == null) {
                 mvpnHandler = new TunnelHandler(this);
@@ -62,8 +65,11 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
                 Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
             }
         }
+
+         */
     }
 
+    /*
     @Override
     public void onTunnelStarted() {
         runOnUiThread(() -> {
@@ -87,11 +93,13 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
             }
         });
     }
+     */
 
     private void loadUrl() {
-        try {
-            webView = MicroVPNSDK.enableWebViewObjectForNetworkTunnel(this, webView, webViewClient);
+        //try {
+            //webView = MicroVPNSDK.enableWebViewObjectForNetworkTunnel(this, webView, webViewClient);
             webView.loadUrl(getIntent().getStringExtra(URL_KEY));
+        /*
         } catch (NetworkTunnelNotStartedException nte) {
             Log.e(TAG, "Network Tunnel is not running:" + nte.getMessage());
             if (!VpnUtil.startTunnel(this, mvpnHandler)) {
@@ -100,5 +108,7 @@ public class StartTunnelAndSendNetworkRequestActivity extends AppCompatActivity 
         } catch (MvpnException e) {
             Log.e(TAG, e.getMessage());
         }
+
+         */
     }
 }

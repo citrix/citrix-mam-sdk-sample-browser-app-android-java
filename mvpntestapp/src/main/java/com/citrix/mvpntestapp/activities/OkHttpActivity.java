@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
-import com.citrix.mvpn.exception.MvpnException;
+//import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.exception.MvpnException;
 import com.citrix.mvpntestapp.R;
 
 import java.io.IOException;
@@ -66,11 +66,13 @@ public class OkHttpActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient.Builder().build();
             Request request = new Request.Builder().url(strUrl[0]).build();
 
+            /*
             try {
                 client = (OkHttpClient) MicroVPNSDK.enableOkHttpClientObjectForNetworkTunnel(activity, client);
             } catch (MvpnException e) {
                 Log.e(TAG, e.getMessage());
             }
+             */
 
             try {
                 Response response = client.newCall(request).execute();

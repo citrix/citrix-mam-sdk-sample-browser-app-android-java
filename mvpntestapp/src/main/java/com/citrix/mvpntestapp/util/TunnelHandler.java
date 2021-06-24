@@ -2,8 +2,9 @@ package com.citrix.mvpntestapp.util;
 
 import android.os.Message;
 
-import com.citrix.mvpn.api.MvpnDefaultHandler;
+//import com.citrix.mvpn.api.MvpnDefaultHandler;
 
+/*
 public class TunnelHandler extends MvpnDefaultHandler {
     private Callback callback;
 
@@ -30,3 +31,4 @@ public class TunnelHandler extends MvpnDefaultHandler {
         }
     }
 }
+*/

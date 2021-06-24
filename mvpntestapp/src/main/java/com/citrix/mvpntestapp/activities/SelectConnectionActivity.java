@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.api.MicroVPNSDK;
 import com.citrix.mvpntestapp.R;
 import com.citrix.mvpntestapp.util.UrlUtil;
 
@@ -23,9 +23,11 @@ public class SelectConnectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_start_tunnel);
 
+        /*
         if (!MicroVPNSDK.isNetworkTunnelRunning(this)) {
             Toast.makeText(this, R.string.start_tunnel_failed_message, Toast.LENGTH_LONG).show();
         }
+         */
 
         uriText = findViewById(R.id.inputURL);
         uriText.setText(UrlUtil.getSavedUrl(this));

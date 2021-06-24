@@ -5,11 +5,11 @@ import android.os.Handler;
 import android.os.Messenger;
 import android.util.Log;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.api.MicroVPNSDK;
 
 public class VpnUtil {
     private static final String TAG = "Mvpn-VpnUtil";
-
+/*
     public static boolean startTunnel(Activity activity, Handler handler) {
         Log.i(TAG, "Starting Micro VPN Tunnel....");
 
@@ -22,4 +22,5 @@ public class VpnUtil {
         }
         return false;
     }
+*/
 }

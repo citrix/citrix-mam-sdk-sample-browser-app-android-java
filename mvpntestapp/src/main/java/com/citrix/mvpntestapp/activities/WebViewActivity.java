@@ -8,8 +8,8 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.citrix.mvpn.api.MicroVPNSDK;
-import com.citrix.mvpn.exception.MvpnException;
+//import com.citrix.mvpn.api.MicroVPNSDK;
+//import com.citrix.mvpn.exception.MvpnException;
 import com.citrix.mvpntestapp.R;
 import com.citrix.mvpntestapp.webview.CustomWebViewClient;
 
@@ -34,11 +34,13 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setSaveFormData(false);
         webView.setWebViewClient(webViewClient);
 
+        /*
         try {
             webView = MicroVPNSDK.enableWebViewObjectForNetworkTunnel(this, webView, webViewClient);
         } catch (MvpnException e) {
             Log.e(TAG, e.getMessage());
         }
+         */
 
         webView.loadUrl(getIntent().getStringExtra(URL_KEY));
     }
