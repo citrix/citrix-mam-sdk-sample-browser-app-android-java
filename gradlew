@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+#
+# Copyright (c) 2023. Cloud Software Group, Inc. All Rights Reserved.
+#
+
 ##############################################################################
 ##
 ##  Gradle start up script for UN*X

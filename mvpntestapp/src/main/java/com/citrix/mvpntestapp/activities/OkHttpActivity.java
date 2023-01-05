@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023. Cloud Software Group, Inc. All Rights Reserved.
+ */
+
 package com.citrix.mvpntestapp.activities;
 
 import android.os.AsyncTask;
