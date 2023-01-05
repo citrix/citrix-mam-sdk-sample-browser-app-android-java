@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (c) 2023. Cloud Software Group, Inc.
+  -->
+
 <resources>
     <string name="app_name">MvpnTestApp</string>
     <string name="test_uri">https://www.citrix.com</string>
